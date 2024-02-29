@@ -1,0 +1,49 @@
+import numpy as np
+from tensorflow.keras import models
+import random
+import chess
+import chess.engine
+
+model = models.load_model('model.keras')
+
+
+def stockfish(board, depth):
+    with chess.engine.SimpleEngine.popen_uci('stockfish/stockfish-windows-x86-64-avx2.exe') as sf:
+        result = sf.analyse(board, chess.engine.Limit(depth=depth))
+        score = result['score'].white().score()
+        return score
+
+
+def create_board(depth):
+    board = chess.Board()
+    board_depth = random.randint(0, depth)
+
+    for _ in range(board_depth):
+        move = random.choice(list(board.legal_moves))
+        board.push(move)
+        if board.is_game_over():
+            return None
+    return board
+
+
+def convert_matrix(board):
+    board3d = np.zeros((13, 8, 8), dtype=np.int8)
+
+    for square, piece in board.piece_map().items():
+        color = piece.color
+        index = np.unravel_index(square, (8, 8))
+        p_index = piece.piece_type - 1 if color == chess.WHITE else piece.piece_type + 5
+        board3d[p_index][7 - index[0]][index[1]] = 1
+    return board3d
+
+
+def minimax_eval(board):
+    board3d = convert_matrix(board)
+    board3d = np.expand_dims(board3d, 0)
+    return model(board3d)[0][0]
+
+
+board = create_board(100)
+print(board)
+print(minimax_eval(board))
+print(stockfish(board, 10))

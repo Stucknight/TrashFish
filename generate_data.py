@@ -1,7 +1,8 @@
-import numpy as np
-import chess
 import random
+
+import chess
 import chess.engine
+import numpy as np
 
 
 def stockfish(board, depth):
@@ -23,7 +24,7 @@ def create_board(depth):
 
 
 def convert_matrix(board):
-    board3d = np.zeros((13, 8, 8), dtype=np.int8)
+    board3d = np.zeros((12, 8, 8), dtype=np.int8)
     for square, piece in board.piece_map().items():
         color = piece.color
         index = np.unravel_index(square, (8, 8))

@@ -1,13 +1,10 @@
-import chess
-import random
 import numpy as np
-import chess.engine
 from tensorflow.keras import models, layers, optimizers
 
 
 def train_model(size):
     model = models.Sequential([
-        layers.Conv2D(size, kernel_size=4, padding='same', activation='relu', input_shape=(13, 8, 8)),
+        layers.Conv2D(size, kernel_size=4, padding='same', activation='relu', input_shape=(12, 8, 8)),
         layers.Conv2D(size, kernel_size=4, padding='same', activation='relu'),
         layers.Conv2D(size, kernel_size=4, padding='same', activation='relu'),
         layers.Flatten(),

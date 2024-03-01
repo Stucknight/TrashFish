@@ -1,8 +1,10 @@
-import numpy as np
-from tensorflow.keras import models
 import random
+
 import chess
 import chess.engine
+import matplotlib.pyplot as plt
+import numpy as np
+from tensorflow.keras import models
 
 model = models.load_model('model.keras')
 
@@ -43,7 +45,24 @@ def minimax_eval(board):
     return model(board3d)[0][0]
 
 
-board = create_board(100)
-print(board)
-print(minimax_eval(board))
-print(stockfish(board, 10))
+def test():
+    board = create_board(20)
+    if board is None:
+        return None
+    t_evaluation = minimax_eval(board)
+    evaluation = str(t_evaluation)[10:str(t_evaluation).find(",")]
+    s_evaluation = stockfish(board, 10)
+    p_diff = abs((float(evaluation) - s_evaluation) / (1 / 2 * (float(evaluation) + s_evaluation))) * 100
+    return p_diff
+
+
+x = []
+y = []
+for i in range(100):
+    a = test()
+    if a is not None:
+        x.append(i)
+        y.append(a)
+
+plt.plot(np.array(x), np.array(y))
+plt.show()

@@ -4,4 +4,5 @@ It will cause brain damage
 Its actually really
 really
 really
-really trash
+really trash. 
+Just kidding, its not even a nnue, idk what i was thinking back then lol.
